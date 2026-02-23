@@ -13,9 +13,14 @@ import {
   X,
   Menu
 } from 'lucide-react';
-import profileImg from './assets/dr-chhavi-chaudhary.jpg';
+import profileImg1 from './assets/dr-chhavi-chaudhary.jpg';
+import profileImg2 from './assets/profile-1.jpeg';
+import profileImg3 from './assets/profile-2.jpeg';
+import profileImg4 from './assets/profile-3.jpeg';
 
 // --- Configuration & Data ---
+
+const HERO_IMAGES = [profileImg1, profileImg2, profileImg3, profileImg4];
 
 const SITE_DATA = {
   doctorName: "Dr. Chhavi Chaudhary",
@@ -110,11 +115,19 @@ export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % HERO_IMAGES.length);
+    }, 4000); // Change image every 4 seconds
+    return () => clearInterval(interval);
   }, []);
 
   const scrollToSection = (id) => {
@@ -209,7 +222,26 @@ export default function App() {
           <div className="md:col-span-5 relative hidden md:block">
             <Reveal direction="left" delay={500}>
               <div className="relative rounded-[2.5rem] overflow-hidden aspect-[4/5] shadow-3xl shadow-slate-900/10 border-8 border-white bg-slate-200">
-                <img src={profileImg} alt="Dr. Chhavi Chaudhary" className="w-full h-full object-cover" />
+                {HERO_IMAGES.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`Dr. Chhavi Chaudhary - ${index + 1}`}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
+                  />
+                ))}
+
+                {/* Slideshow Indicators */}
+                <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-20">
+                  {HERO_IMAGES.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`h-1.5 rounded-full transition-all duration-500 ${index === currentImageIndex ? 'w-8 bg-white' : 'w-2 bg-white/50 hover:bg-white/80'}`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
             </Reveal>
           </div>
