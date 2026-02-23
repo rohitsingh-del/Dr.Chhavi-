@@ -13,7 +13,7 @@ import {
   X,
   Menu
 } from 'lucide-react';
-import profileImg from './assets/dr-chhavi-chaudhary.avif';
+import profileImg from './assets/dr-chhavi-chaudhary.jpg';
 
 // --- Configuration & Data ---
 
